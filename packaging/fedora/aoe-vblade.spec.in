@@ -1,0 +1,53 @@
+
+Summary: Userspace AoE server (vbalde/vbladed).
+Name: aoe-vblade
+Version: __VERSION__
+Release: __RELEASE__
+License: GPLv2
+Group: System Environment/Daemons
+URL: https://github.comOpenAoE/vblade
+Source0: %{name}-%{version}.%{release}.tar.bz2
+
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRequires: make, gcc
+
+%description
+The vblade is a minimal ATA over Ethernet (AoE) storage target.  Its
+focus is simplicity, not performance or richness of features.  It
+exports a seekable file available over an ethernet local area network
+(LAN) via the AoE data storage protocol.
+
+The name, "vblade," is historical: It is a virtual EtherDrive (R)
+blade.  The first AoE target hardware sold by Coraid was in a blade
+form factor, ten to a 4-rack-unit chassis.
+
+The seekable file is typically a block device like /dev/md0 but even
+regular files will work.  Sparse files can be especially convenient.
+When vblade exports the block storage over AoE it becomes a storage
+target.  Another host on the same LAN can access the storage if it has
+a compatible aoe kernel driver.
+
+%prep
+%setup -q
+
+%build
+%make_build
+
+%install
+rm -rf $RPM_BUILD_ROOT
+mkdir -p $RPM_BUILD_ROOT/usr/{sbin,share/man/man8}
+%make_install prefix=$RPM_BUILD_ROOT/usr
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files
+%defattr(-,root,root,-)
+%doc COPYING HACKING NEWS README
+%{_sbindir}/vblade
+%{_sbindir}/vbladed
+%{_mandir}/man8/vblade*
+
+%changelog
+* Sun Mar 08 2020 Krisztian Litkey <kli@iki.fi> - v24.2
+- Initial build.

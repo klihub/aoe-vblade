@@ -41,3 +41,5 @@ install : vblade vbladed
 	install vblade ${sbindir}/
 	install vbladed ${sbindir}/
 	install vblade.8 ${mandir}/man8/
+
+include makefile.fedora
